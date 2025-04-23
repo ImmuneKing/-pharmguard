@@ -25,7 +25,7 @@ PharmGuard - это веб-приложение для верификации п
 
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/yourusername/pharmguard.git
+git clone https://github.com/LimboPharm/pharmguard.git
 cd pharmguard
 ```
 
@@ -67,6 +67,12 @@ python backend/app.py
 - Защита от CSRF-атак
 - Безопасные сессии пользователей
 
+## Автор
+
+- **ImmuneKing** - *Разработчик* - [GitHub](https://github.com/ImmuneKing)
+
 ## Лицензия
 
-MIT License 
+Этот проект лицензирован под MIT License - см. файл [LICENSE](LICENSE) для деталей.
+
+Copyright (c) 2024 ImmuneKing (PharmGuard) 
