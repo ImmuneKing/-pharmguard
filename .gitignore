@@ -23,6 +23,7 @@ wheels/
 
 # Virtual Environment
 venv/
+.venv/
 ENV/
 
 # IDE
@@ -34,6 +35,7 @@ ENV/
 # Database
 *.db
 *.sqlite3
+*.sqlite3-journal
 
 # Environment variables
 .env
