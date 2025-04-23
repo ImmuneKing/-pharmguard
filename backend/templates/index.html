@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система верификации лекарств</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2C5282;
+            --accent-color: #4FD1C5;
+            --background-color: #F7FAFC;
+            --text-color: #2D3748;
+            --border-color: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .drug-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .drug-item {
+            padding: 25px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .drug-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .drug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .drug-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .drug-details {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 500;
+            width: 180px;
+            color: #4A5568;
+            font-size: 0.95em;
+        }
+
+        .info-value {
+            flex: 1;
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .button:hover {
+            background-color: #1A365D;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(44, 82, 130, 0.2);
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 30px auto;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 25px auto;
+            padding: 15px;
+            background-color: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .qr-code:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-info {
+            margin: 15px 0;
+            color: #4A5568;
+            font-size: 0.95em;
+            background-color: #EBF8FF;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #BEE3F8;
+        }
+
+        .verification-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 32px;
+            color: white;
+            background-color: var(--accent-color);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .verification-link:hover {
+            background-color: #38B2AC;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 209, 197, 0.2);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+
+        .status-used {
+            background-color: #FED7D7;
+            color: #822727;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Панель управления производителя</h1>
+            <p>Система для регистрации и верификации лекарственных средств</p>
+        </div>
+
+        <div class="section fade-in">
+            <h2>Управление продукцией</h2>
+            <button class="button" onclick="createTestDrug()">Зарегистрировать лекарство</button>
+            <button class="button" onclick="refreshDrugList()">Обновить базу данных</button>
+        </div>
+
+        <div id="qrCodeSection" class="qr-section fade-in" style="display: none;">
+            <h2>QR-код для верификации</h2>
+            <img id="qrCode" class="qr-code" src="" alt="QR код">
+            <p class="qr-info">Этот QR-код нужно разместить на упаковке лекарства</p>
+            <a id="verificationLink" class="verification-link" href="" target="_blank">
+                Предпросмотр страницы верификации
+            </a>
+        </div>
+
+        <div class="section fade-in">
+            <h2>Зарегистрированные лекарства</h2>
+            <ul id="drugList" class="drug-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        async function createTestDrug() {
+            try {
+                const response = await fetch('/create-test-drug', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('Ошибка: ' + data.error);
+                    return;
+                }
+
+                document.getElementById('qrCodeSection').style.display = 'block';
+                document.getElementById('qrCode').src = data.qr_code;
+                document.getElementById('verificationLink').href = data.verification_url;
+
+                refreshDrugList();
+            } catch (error) {
+                alert('Произошла ошибка при создании записи');
+                console.error('Ошибка:', error);
+            }
+        }
+
+        async function refreshDrugList() {
+            try {
+                const response = await fetch('/api/drugs');
+                const data = await response.json();
+                const drugList = document.getElementById('drugList');
+                drugList.innerHTML = '';
+
+                data.drugs.forEach(drug => {
+                    const li = document.createElement('li');
+                    li.className = 'drug-item fade-in';
+                    
+                    // Форматируем дату создания
+                    const createdDate = new Date(drug.created_at).toLocaleString('ru-RU', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    // Форматируем дату истечения срока годности
+                    const expirationDate = new Date(drug.expiration_date).toLocaleDateString('ru-RU', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    li.innerHTML = `
+                        <div class="drug-header">
+                            <h3>${drug.name}</h3>
+                            <span class="status-badge ${drug.is_used ? 'status-used' : 'status-active'}">
+                                ${drug.is_used ? 'Использован' : 'Активен'}
+                            </span>
+                        </div>
+                        <div class="drug-details">
+                            <div class="info-row">
+                                <span class="info-label">Производитель:</span>
+                                <span class="info-value">${drug.manufacturer}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Серийный номер:</span>
+                                <span class="info-value">${drug.serial_number}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Форма выпуска:</span>
+                                <span class="info-value">${drug.form}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Срок годности:</span>
+                                <span class="info-value">${expirationDate}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Дата регистрации:</span>
+                                <span class="info-value">${createdDate}</span>
+                            </div>
+                        </div>
+                    `;
+                    drugList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Ошибка при получении списка лекарств:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', refreshDrugList);
+    </script>
+</body>
+</html> 

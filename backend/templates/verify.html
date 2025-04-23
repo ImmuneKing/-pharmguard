@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка подлинности | PharmGuard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
+            --warning-color: #f59e0b;
+            --background-color: #f8fafc;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        @media (min-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 2rem;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .verification-status {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .verification-status.success {
+            background-color: #dcfce7;
+            color: var(--success-color);
+            border: 1px solid #bbf7d0;
+        }
+
+        .verification-status.error {
+            background-color: #fee2e2;
+            color: var(--error-color);
+            border: 1px solid #fecaca;
+        }
+
+        .verification-status.warning {
+            background-color: #fef3c7;
+            color: var(--warning-color);
+            border: 1px solid #fde68a;
+        }
+
+        .drug-info {
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .drug-info-header {
+            background-color: var(--background-color);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .drug-info-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .drug-info-content {
+            padding: 1rem;
+        }
+
+        .info-row {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            color: var(--text-color);
+            font-size: 1.125rem;
+        }
+
+        @media (min-width: 640px) {
+            .info-row {
+                display: flex;
+                align-items: center;
+            }
+            .info-label {
+                width: 40%;
+                margin-bottom: 0;
+            }
+            .info-value {
+                width: 60%;
+            }
+        }
+
+        .usage-info {
+            margin-top: 1.5rem;
+        }
+
+        .usage-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #64748b;
+        }
+
+        .usage-section {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: var(--background-color);
+            border-radius: 0.5rem;
+        }
+
+        .usage-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .usage-section p, .usage-section ul {
+            font-size: 0.9375rem;
+            color: #64748b;
+            white-space: pre-line;
+        }
+
+        .usage-section ul {
+            list-style-position: inside;
+            padding-left: 0.5rem;
+        }
+
+        .usage-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 1.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .back-link:before {
+            content: "←";
+            margin-right: 0.5rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.75rem;
+            display: block;
+        }
+
+        @media (min-width: 640px) {
+            .logo {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .brand-name {
+            color: #2563eb;
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .brand-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="PharmGuard Logo" class="logo">
+            <div class="brand-name">PharmGuard</div>
+            <h1>Проверка подлинности лекарства</h1>
+        </div>
+
+        {% if error %}
+            <div class="verification-status error">
+                {{ error }}
+            </div>
+        {% elif drug %}
+            {% if drug.first_scan %}
+                <div class="verification-status success">
+                    ✓ Это первое сканирование! Лекарство подлинное.
+                    <div style="font-size: 0.9em; margin-top: 0.5rem;">
+                        QR-код был автоматически отмечен как использованный для предотвращения повторного использования упаковки.
+                    </div>
+                </div>
+            {% else %}
+                <div class="verification-status warning">
+                    ⚠️ Внимание! Этот QR-код уже был отсканирован ранее.
+                    <div style="font-size: 0.9em; margin-top: 0.5rem;">
+                        Если вы не являетесь первым покупателем этого лекарства, рекомендуем обратиться к продавцу.
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="drug-info">
+                <div class="drug-info-header">
+                    <h2>{{ drug.name }}</h2>
+                </div>
+                <div class="drug-info-content">
+                    <div class="info-row">
+                        <div class="info-label">Форма выпуска</div>
+                        <div class="info-value">{{ drug.form }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Производитель</div>
+                        <div class="info-value">{{ drug.manufacturer }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Серийный номер</div>
+                        <div class="info-value">{{ drug.serial_number }}</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Срок годности</div>
+                        <div class="info-value">{{ drug.expiration_date }}</div>
+                    </div>
+                </div>
+            </div>
+
+            {% if drug.info %}
+            <div class="usage-info">
+                <h3>Информация о препарате</h3>
+                
+                <div class="usage-section">
+                    <h4>Описание</h4>
+                    <p>{{ drug.info.description }}</p>
+                </div>
+
+                <div class="usage-section">
+                    <h4>Способ применения</h4>
+                    <p>{{ drug.info.usage }}</p>
+                </div>
+
+                <div class="usage-section">
+                    <h4>Противопоказания</h4>
+                    <p>{{ drug.info.contraindications }}</p>
+                </div>
+
+                <div class="usage-section">
+                    <h4>Побочные эффекты</h4>
+                    <p>{{ drug.info.side_effects }}</p>
+                </div>
+
+                <div class="usage-section">
+                    <h4>Условия хранения</h4>
+                    <p>{{ drug.info.storage }}</p>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <a href="/" class="back-link">На главную</a>
+    </div>
+</body>
+</html> 

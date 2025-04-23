@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация лекарств | PharmGuard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #4285f4;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .button-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26,115,232,0.2);
+        }
+
+        .button-secondary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .button-secondary:hover {
+            background-color: #f8f9fa;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background-color: #ffe6e6;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .success-message {
+            color: #28a745;
+            background-color: #e6ffe6;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #28a745;
+        }
+
+        .form-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        input:invalid, select:invalid {
+            border-color: #dc3545;
+        }
+
+        input:invalid:focus, select:invalid:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 2px rgba(220,53,69,0.25);
+        }
+
+        .qr-codes {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .qr-code {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .qr-code img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .qr-code p {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .qr-code a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .qr-code a:hover {
+            text-decoration: underline;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .qr-code {
+                break-inside: avoid;
+            }
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 0.75rem;
+        }
+
+        .brand-name {
+            color: #2563eb;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="PharmGuard Logo" class="logo">
+                <div class="brand-name">PharmGuard</div>
+            </div>
+        </div>
+
+        <h1>Регистрация лекарства</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{{ 'error-message' if category == 'error' else 'success-message' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if not success %}
+        <form method="POST" action="{{ url_for('register_drug') }}" id="drugRegistrationForm" novalidate>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class="form-group">
+                <label for="name">Название лекарства *</label>
+                <input type="text" id="name" name="name" required>
+                <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="form">Форма выпуска *</label>
+                <input type="text" id="form" name="form" required placeholder="Например: Таблетки, Капсулы, Сироп">
+                <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="manufacturer">Производитель *</label>
+                <input type="text" id="manufacturer" name="manufacturer" required placeholder="Название компании-производителя">
+                <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="expiration_date">Срок годности *</label>
+                <input type="date" id="expiration_date" name="expiration_date" required min="{{ today }}">
+                <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="batch_number">Номер партии *</label>
+                <input type="text" id="batch_number" name="batch_number" required pattern="[A-Za-z0-9]+" title="Только буквы и цифры">
+                <div class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Количество упаковок (1-100) *</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="100" value="1" required>
+                <div class="form-error"></div>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="button button-primary">Зарегистрировать</button>
+                <a href="{{ url_for('dashboard') }}" class="button button-secondary">Отмена</a>
+            </div>
+        </form>
+        {% else %}
+            <div class="success-message">
+                {{ success }}
+                <button onclick="window.print()" class="button button-secondary no-print">Распечатать QR-коды</button>
+            </div>
+
+            <div class="qr-codes">
+                {% for qr in qr_codes %}
+                <div class="qr-code">
+                    <img src="{{ qr.code }}" alt="QR код">
+                    <p>Серийный номер: {{ qr.serial_number }}</p>
+                    <p><a href="{{ qr.url }}" target="_blank">Проверить</a></p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="buttons no-print">
+                <a href="{{ url_for('register_drug') }}" class="button button-primary">Зарегистрировать ещё</a>
+                <a href="{{ url_for('dashboard') }}" class="button button-secondary">Вернуться на главную</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('drugRegistrationForm');
+            if (form) {
+                // Устанавливаем минимальную дату
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('expiration_date').min = today;
+
+                // Валидация формы
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    let isValid = true;
+                    
+                    // Очищаем предыдущие ошибки
+                    document.querySelectorAll('.form-error').forEach(el => el.textContent = '');
+                    
+                    // Проверяем каждое поле
+                    const fields = form.querySelectorAll('input[required], select[required]');
+                    fields.forEach(field => {
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.nextElementSibling.textContent = 'Это поле обязательно для заполнения';
+                        } else if (field.id === 'batch_number' && !/^[A-Za-z0-9]+$/.test(field.value)) {
+                            isValid = false;
+                            field.nextElementSibling.textContent = 'Только буквы и цифры';
+                        } else if (field.id === 'quantity') {
+                            const qty = parseInt(field.value);
+                            if (isNaN(qty) || qty < 1 || qty > 100) {
+                                isValid = false;
+                                field.nextElementSibling.textContent = 'Количество должно быть от 1 до 100';
+                            }
+                        }
+                    });
+
+                    if (isValid) {
+                        const formData = new FormData(form);
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            credentials: 'same-origin',
+                            headers: {
+                                'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.documentElement.innerHTML = html;
+                            // Перезапускаем скрипты
+                            Array.from(document.scripts).forEach(script => {
+                                if (!script.src) {
+                                    eval(script.innerHTML);
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Произошла ошибка при регистрации лекарства');
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

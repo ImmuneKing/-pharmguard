@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Система верификации лекарств</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin-right: 20px;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: #6b7280;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .activity-log {
+            margin-top: 30px;
+        }
+
+        .activity-log h3 {
+            margin-bottom: 20px;
+        }
+
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .activity-details {
+            margin-top: 5px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .security-settings {
+            background: var(--background-color);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .two-factor-status h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-enabled, .status-disabled {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .status-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+
+        .status-enabled .status-icon {
+            background-color: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .status-disabled .status-icon {
+            background-color: #fef3c7;
+            color: var(--warning-color);
+        }
+
+        .help-text {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 1rem;
+        }
+
+        .button-danger {
+            background-color: var(--error-color);
+        }
+
+        .button-danger:hover {
+            opacity: 0.9;
+        }
+
+        .inline-form {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Система верификации лекарств</div>
+            <nav class="nav">
+                <a href="{{ url_for('dashboard') }}">Главная</a>
+                <a href="{{ url_for('profile') }}">Личный кабинет</a>
+                <a href="{{ url_for('logout') }}">Выйти</a>
+            </nav>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="profile-grid">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        {{ user.username[0].upper() }}
+                    </div>
+                    <div class="profile-info">
+                        <h2>{{ user.username }}</h2>
+                        <p>{{ user.role.name }}</p>
+                    </div>
+                </div>
+
+                <form action="{{ url_for('update_profile') }}" method="POST">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company_name">Название компании</label>
+                        <input type="text" id="company_name" name="company_name" value="{{ user.company_name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="new_password">Новый пароль (оставьте пустым, если не хотите менять)</label>
+                        <input type="password" id="new_password" name="new_password">
+                    </div>
+
+                    <button type="submit" class="btn">Сохранить изменения</button>
+                </form>
+            </div>
+
+            <div class="profile-card">
+                <h3>История активности</h3>
+                <div class="activity-log">
+                    {% for log in activity_logs %}
+                        <div class="activity-item">
+                            <div class="activity-time">
+                                {{ log.created_at.strftime('%d.%m.%Y %H:%M') }}
+                            </div>
+                            <div class="activity-details">
+                                {{ log.action }} - {{ log.details }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Безопасность</h2>
+            <div class="security-settings">
+                <div class="two-factor-status">
+                    <h3>Двухфакторная аутентификация</h3>
+                    {% if user.two_factor_enabled and user.two_factor_confirmed %}
+                        <p class="status-enabled">
+                            <span class="status-icon">✓</span>
+                            Двухфакторная аутентификация включена
+                        </p>
+                        <form action="{{ url_for('disable_2fa') }}" method="POST" class="inline-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="button button-danger">Отключить 2FA</button>
+                        </form>
+                    {% else %}
+                        <p class="status-disabled">
+                            <span class="status-icon">!</span>
+                            Двухфакторная аутентификация отключена
+                        </p>
+                        <a href="{{ url_for('setup_2fa') }}" class="button">Настроить 2FA</a>
+                    {% endif %}
+                    <p class="help-text">
+                        Двухфакторная аутентификация добавляет дополнительный уровень безопасности 
+                        к вашей учетной записи, требуя ввода одноразового кода при входе в систему.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
