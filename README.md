@@ -1,5 +1,10 @@
 # PharmGuard - Система верификации лекарственных средств
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![Flask Version](https://img.shields.io/badge/flask-latest-green)
+![Status](https://img.shields.io/badge/status-active-success)
+
 PharmGuard - это веб-приложение для верификации подлинности лекарственных средств с использованием QR-кодов. Система позволяет производителям регистрировать свою продукцию и генерировать уникальные QR-коды для каждой упаковки, а потребителям - проверять подлинность лекарств путем сканирования этих кодов.
 
 ## Основные функции
